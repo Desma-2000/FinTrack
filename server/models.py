@@ -1,8 +1,10 @@
 from datetime import datetime
-import bcrypt
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_serializer import SerializerMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from config import db
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -13,23 +15,15 @@ class User(db.Model):
     budgets = db.relationship('Budget', backref='user', lazy=True)
     goals = db.relationship('Goal', backref='user', lazy=True)
 
+    serialize_only = ('id', 'username', 'email', 'expenses', 'budgets', 'goals')
+
     def set_password(self, password):
-        self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
+        return check_password_hash(self.password_hash, password)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'email': self.email,
-            'expenses': [expense.to_dict() for expense in self.expenses],
-            'budgets': [budget.to_dict() for budget in self.budgets],
-            'goals': [goal.to_dict() for goal in self.goals]
-        }
-
-class Expense(db.Model):
+class Expense(db.Model, SerializerMixin):
     __tablename__ = 'expenses'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -39,17 +33,9 @@ class Expense(db.Model):
     description = db.Column(db.String(255))
     date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'amount': self.amount,
-            'category': self.category,
-            'description': self.description,
-            'date': self.date.isoformat()
-        }
+    serialize_only = ('id', 'user_id', 'amount', 'category', 'description', 'date')
 
-class Budget(db.Model):
+class Budget(db.Model, SerializerMixin):
     __tablename__ = 'budgets'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -59,17 +45,9 @@ class Budget(db.Model):
     start_date = db.Column(db.DateTime, default=datetime.utcnow)
     end_date = db.Column(db.DateTime, nullable=False)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'amount': self.amount,
-            'category': self.category,
-            'start_date': self.start_date.isoformat(),
-            'end_date': self.end_date.isoformat()
-        }
+    serialize_only = ('id', 'user_id', 'amount', 'category', 'start_date', 'end_date')
 
-class Goal(db.Model):
+class Goal(db.Model, SerializerMixin):
     __tablename__ = 'goals'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -79,12 +57,4 @@ class Goal(db.Model):
     current_amount = db.Column(db.Float, default=0.0)
     target_date = db.Column(db.DateTime, nullable=False)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'name': self.name,
-            'target_amount': self.target_amount,
-            'current_amount': self.current_amount,
-            'target_date': self.target_date.isoformat()
-        }
+    serialize_only = ('id', 'user_id', 'name', 'target_amount', 'current_amount', 'target_date')
