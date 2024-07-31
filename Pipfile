@@ -12,10 +12,11 @@ flask-restful = "*"
 flask-cors = "*"
 faker = "*"
 python-dotenv = "*"
-
 sqlalchemy-serializer = "*"
 werkzeug = "*"
 bcrypt = "*"
+flask-jwt-extended = "*"
+flask-bcrypt = "*"
 
 [requires]
 python_full_version = "3.8.13"
