@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fintrack.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-app.config["SECRET_KEY"] = "mysecret"
+app.config["SECRET_KEY"] = "4395bcc6b24a958549abe241e893a575d705c739ad4c6146ae8d1f16c4d4555f"
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
 
@@ -69,7 +69,7 @@ def login():
     return jsonify(access_token=access_token), 200
 
 # Expense Routes
-@app.route('/expenses/', methods=['POST'])
+@app.route('/expenses', methods=['POST'])
 @jwt_required()
 def create_expense():
     user_id = get_jwt_identity()
@@ -79,7 +79,7 @@ def create_expense():
     db.session.commit()
     return jsonify(expense.to_dict()), 201
 
-@app.route('/expenses/', methods=['GET'])
+@app.route('/expenses', methods=['GET'])
 @jwt_required()
 def get_expenses():
     user_id = get_jwt_identity()
@@ -114,7 +114,7 @@ def delete_expense(expense_id):
     return jsonify({"msg": "Expense deleted"}), 200
 
 # Budget Routes
-@app.route('/budgets/', methods=['POST'])
+@app.route('/budgets', methods=['POST'])
 @jwt_required()
 def create_budget():
     user_id = get_jwt_identity()
@@ -124,7 +124,7 @@ def create_budget():
     db.session.commit()
     return jsonify(budget.to_dict()), 201
 
-@app.route('/budgets/', methods=['GET'])
+@app.route('/budgets', methods=['GET'])
 @jwt_required()
 def get_budgets():
     user_id = get_jwt_identity()
@@ -159,7 +159,7 @@ def delete_budget(budget_id):
     return jsonify({"msg": "Budget deleted"}), 200
 
 # Goal Routes
-@app.route('/goals/', methods=['POST'])
+@app.route('/goals', methods=['POST'])
 @jwt_required()
 def create_goal():
     user_id = get_jwt_identity()
@@ -169,7 +169,7 @@ def create_goal():
     db.session.commit()
     return jsonify(goal.to_dict()), 201
 
-@app.route('/goals/', methods=['GET'])
+@app.route('/goals', methods=['GET'])
 @jwt_required()
 def get_goals():
     user_id = get_jwt_identity()
