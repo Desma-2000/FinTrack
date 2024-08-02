@@ -1,8 +1,7 @@
-
 #!/usr/bin/env python3
 
 # Standard library imports
-from flask import Flask,jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -10,6 +9,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_required, get_jwt
 from datetime import timedelta
 import random, os
+from datetime import datetime
 
 # Add your model imports
 from models import db, User, Expense, Budget, Goal
@@ -22,7 +22,6 @@ app.json.compact = False
 app.config["SECRET_KEY"] = "4395bcc6b24a958549abe241e893a575d705c739ad4c6146ae8d1f16c4d4555f"
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
-
 
 migrate = Migrate(app, db)
 db.init_app(app)
@@ -69,24 +68,27 @@ def login():
     return jsonify(access_token=access_token), 200
 
 # Expense Routes
-@app.route('/expenses', methods=['POST'])
+@app.route('/expense', methods=['POST'])
 @jwt_required()
 def create_expense():
     user_id = get_jwt_identity()
     data = request.get_json()
+
+    if 'date' in data:
+        data['date'] = datetime.strptime(data['date'], '%Y-%m-%d')
     expense = Expense(user_id=user_id, **data)
     db.session.add(expense)
     db.session.commit()
     return jsonify(expense.to_dict()), 201
 
-@app.route('/expenses', methods=['GET'])
+@app.route('/expense', methods=['GET'])
 @jwt_required()
 def get_expenses():
     user_id = get_jwt_identity()
     expenses = Expense.query.filter_by(user_id=user_id).all()
     return jsonify([expense.to_dict() for expense in expenses]), 200
 
-@app.route('/expenses/<int:expense_id>', methods=['PUT'])
+@app.route('/expense/<int:expense_id>', methods=['PUT'])
 @jwt_required()
 def update_expense(expense_id):
     user_id = get_jwt_identity()
@@ -101,7 +103,7 @@ def update_expense(expense_id):
     db.session.commit()
     return jsonify(expense.to_dict()), 200
 
-@app.route('/expenses/<int:expense_id>', methods=['DELETE'])
+@app.route('/expense/<int:expense_id>', methods=['DELETE'])
 @jwt_required()
 def delete_expense(expense_id):
     user_id = get_jwt_identity()
@@ -119,6 +121,11 @@ def delete_expense(expense_id):
 def create_budget():
     user_id = get_jwt_identity()
     data = request.get_json()
+    if 'start_date' in data:
+        data['start_date'] = datetime.strptime(data['start_date'], '%Y-%m-%d')
+
+    if 'end_date' in data:
+        data['end_date'] = datetime.strptime(data['end_date'], '%Y-%m-%d')
     budget = Budget(user_id=user_id, **data)
     db.session.add(budget)
     db.session.commit()
@@ -136,6 +143,8 @@ def get_budgets():
 def update_budget(budget_id):
     user_id = get_jwt_identity()
     data = request.get_json()
+    if 'end_date' in data:
+        data['end_date'] = datetime.strptime(data['end_date'], '%Y-%m-%d')
     budget = Budget.query.filter_by(id=budget_id, user_id=user_id).first()
     if not budget:
         return jsonify({"msg": "Budget not found"}), 404
@@ -203,13 +212,35 @@ def delete_goal(goal_id):
     db.session.commit()
     return jsonify({"msg": "Goal deleted"}), 200
 
+# Financial Insights Route
+@app.route('/analytics', methods=['GET'])
+@jwt_required()
+def get_analytics():
+    user_id = get_jwt_identity()
+    goals = Goal.query.filter_by(user_id=user_id).all()
+    expenses = Expense.query.filter_by(user_id=user_id).all()
+    budgets = Budget.query.filter_by(user_id=user_id).all()
 
-# Register blueprints
-# app.register_blueprint(auth_bp, url_prefix='/auth')
-# app.register_blueprint(expense_bp, url_prefix='/expenses')
-# app.register_blueprint(budget_bp, url_prefix='/budgets')
-# app.register_blueprint(goal_bp, url_prefix='/goals')
+    total_goal_amount = sum(goal.target_amount for goal in goals)
+    total_current_amount = sum(goal.current_amount for goal in goals)
+    total_expenses = sum(expense.amount for expense in expenses)
+    total_budgets = sum(budget.amount for budget in budgets)
 
+    return jsonify({
+        'total_goal_amount': total_goal_amount,
+        'total_current_amount': total_current_amount,
+        'total_expenses': total_expenses,
+        'total_budgets': total_budgets,
+        'goal_summary': [
+            {
+                'name': goal.name,
+                'target_amount': goal.target_amount,
+                'current_amount': goal.current_amount,
+                'progress': (goal.current_amount / goal.target_amount * 100) if goal.target_amount > 0 else 0
+            }
+            for goal in goals
+        ]
+    })
 
 @app.route('/')
 def index():

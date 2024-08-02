@@ -3,7 +3,6 @@ from datetime import datetime
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-from werkzeug.security import generate_password_hash, check_password_hash
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -41,7 +40,6 @@ class User(db.Model):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            # Optionally include related entities if needed
         }
 
 class Expense(db.Model):

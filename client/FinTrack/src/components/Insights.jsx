@@ -1,6 +1,5 @@
-// src/components/Insights.jsx
-
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { useEffect, useState } from 'react';
+import { Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,11 +8,10 @@ import {
   Title,
   Tooltip,
   Legend,
-  LineElement,
-  PointElement,
   ArcElement,
   Filler // Import the Filler plugin
 } from 'chart.js';
+import axiosInstance from '../AxiosInstance'; // Import the custom Axios instance
 
 // Register the necessary Chart.js components including the Filler plugin
 ChartJS.register(
@@ -23,49 +21,85 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  LineElement,
-  PointElement,
   ArcElement,
   Filler // Register the Filler plugin
 );
 
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Expenses',
-      data: [30, 45, 60, 70, 90, 100, 120],
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-    },
-    {
-      label: 'Budgets',
-      data: [50, 60, 80, 90, 100, 120, 140],
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-      borderColor: 'rgba(153, 102, 255, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
+const Insights = () => {
+  const [budgets, setBudgets] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [goal, setGoal] = useState('');
+  const [goals, setGoals] = useState([]);
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top',
-    },
-    tooltip: {
-      callbacks: {
-        label: function (tooltipItem) {
-          return tooltipItem.dataset.label + ': ' + tooltipItem.formattedValue;
+  useEffect(() => {
+    const fetchBudgets = async () => {
+      try {
+        const response = await axiosInstance.get('/budgets');
+        setBudgets(response.data);
+      } catch (error) {
+        console.error('Error fetching budgets:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    const fetchExpenses = async () => {
+      try {
+        const response = await axiosInstance.get('/expenses');
+        setExpenses(response.data);
+      } catch (error) {
+        console.error('Error fetching expenses:', error.response ? error.response.data : error.message);
+      }
+    };
+
+    fetchBudgets();
+    fetchExpenses();
+  }, []);
+
+  const handleGoalSubmit = (e) => {
+    e.preventDefault();
+    setGoals([...goals, goal]);
+    setGoal('');
+  };
+
+  const budgetLabels = budgets.map(b => b.category);
+  const budgetData = budgets.map(b => b.amount);
+  const expenseData = expenses.map(e => e.amount);
+
+  const data = {
+    labels: budgetLabels,
+    datasets: [
+      {
+        label: 'Budgets',
+        data: budgetData,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Expenses',
+        data: expenseData,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem) {
+            return tooltipItem.dataset.label + ': ' + tooltipItem.formattedValue;
+          },
         },
       },
     },
-  },
-};
+  };
 
-const Insights = () => {
   return (
     <div>
       <h1>Financial Insights</h1>
@@ -97,6 +131,25 @@ const Insights = () => {
             ],
           }}
         />
+        <h2>Set Financial Goals</h2>
+        <form onSubmit={handleGoalSubmit}>
+          <label>
+            Goal:
+            <input 
+              type="text" 
+              value={goal} 
+              onChange={(e) => setGoal(e.target.value)} 
+              placeholder="Enter your financial goal"
+            />
+          </label>
+          <button type="submit">Add Goal</button>
+        </form>
+        <h3>Current Goals</h3>
+        <ul>
+          {goals.map((g, index) => (
+            <li key={index}>{g}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
