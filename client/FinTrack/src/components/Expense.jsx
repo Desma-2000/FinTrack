@@ -25,11 +25,12 @@ const Expenses = () => {
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
-    
+    const [editExpense, setEditExpense] = useState(null);
+
     // Fetch expenses from the backend
     const fetchExpenses = async () => {
         try {
-            const response = await axiosInstance.get('/expense'); // Ensure the correct endpoint
+            const response = await axiosInstance.get('/expense');
             setExpenses(response.data);
         } catch (error) {
             console.error('Error fetching expenses:', error.response ? error.response.data : error.message);
@@ -40,17 +41,42 @@ const Expenses = () => {
         fetchExpenses();
     }, []);
 
-    // Handle form submission to add a new expense
+    // Handle form submission to add or update an expense
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axiosInstance.post('/expense', { amount, category, description });
+            if (editExpense) {
+                // Update expense
+                await axiosInstance.put(`/expense/${editExpense.id}`, { amount, category, description });
+                setEditExpense(null);
+            } else {
+                // Add new expense
+                await axiosInstance.post('/expense', { amount, category, description });
+            }
             fetchExpenses();
             setAmount('');
             setCategory('');
             setDescription('');
         } catch (error) {
-            console.error('Error adding expense:', error.response ? error.response.data : error.message);
+            console.error('Error saving expense:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    // Handle edit click
+    const handleEdit = (expense) => {
+        setAmount(expense.amount);
+        setCategory(expense.category);
+        setDescription(expense.description);
+        setEditExpense(expense);
+    };
+
+    // Handle delete click
+    const handleDelete = async (id) => {
+        try {
+            await axiosInstance.delete(`/expense/${id}`);
+            fetchExpenses();
+        } catch (error) {
+            console.error('Error deleting expense:', error.response ? error.response.data : error.message);
         }
     };
 
@@ -135,7 +161,8 @@ const Expenses = () => {
                         onChange={(e) => setDescription(e.target.value)} 
                     />
                 </div>
-                <button type="submit">Add Expense</button>
+                <button type="submit">{editExpense ? 'Update Expense' : 'Add Expense'}</button>
+                {editExpense && <button type="button" onClick={() => setEditExpense(null)}>Cancel Edit</button>}
             </form>
             <h2>Expense Overview</h2>
             <div style={{ width: '80%', margin: '0 auto' }}>
@@ -149,6 +176,8 @@ const Expenses = () => {
                 {expenses.map((expense) => (
                     <li key={expense.id}>
                         {expense.description} - ${expense.amount} - {expense.category}
+                        <button onClick={() => handleEdit(expense)}>Edit</button>
+                        <button onClick={() => handleDelete(expense.id)}>Delete</button>
                     </li>
                 ))}
             </ul>

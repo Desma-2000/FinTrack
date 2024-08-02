@@ -43,7 +43,7 @@ const Insights = () => {
 
     const fetchExpenses = async () => {
       try {
-        const response = await axiosInstance.get('/expenses');
+        const response = await axiosInstance.get('/expense');
         setExpenses(response.data);
       } catch (error) {
         console.error('Error fetching expenses:', error.response ? error.response.data : error.message);
