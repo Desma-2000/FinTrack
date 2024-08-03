@@ -80,7 +80,7 @@ const Budgets = () => {
     return (
         <div>
             <h1>Budgets</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className='budget-form'>
                 <div>
                     <label>Amount</label>
                     <input 

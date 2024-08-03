@@ -22,7 +22,7 @@ const Register = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='registration-form'>
             <div>
                 <label>Username</label>
                 <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
