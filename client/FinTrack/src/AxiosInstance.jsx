@@ -19,4 +19,13 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+// Response interceptor to handle errors without logging sensitive information
+axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.error('An error occurred:', error.message);
+        return Promise.reject(error);
+    }
+);
+
 export default axiosInstance;
