@@ -1,0 +1,26 @@
+/* src/components/home.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+section {
+    display: flex;
+    justify-content: flex-end; /* Align text to the right */
+    align-items: center;
+    min-height: 100vh; /* Ensure the section takes up the full viewport height */
+    background-image: url('/Fintrack2.jpg'); /* Path relative to public directory */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.tittle {
+    color: rgb(111, 242, 60);
+    text-align: right; /* Align text to the right */
+    font-size: 2rem;
+    margin-right: 20px; /* Add some space from the edge */
+    z-index: 1; /* Ensure text is above background */
+    position: relative; /* To ensure correct stacking */
+}

@@ -1,11 +1,12 @@
-
+// src/components/Home.jsx
+import "./home.css"
 
 const Home = () => {
-    console.log("Home component rendered");
     return (
-        <div>
-            <h1>Welcome to FinTrack</h1>
-        </div>
+        <section>
+            <h1 className="tittle">FinTrack</h1>
+            <p className="tittle">Your personal finance companion.</p>
+        </section>
     );
 };
 

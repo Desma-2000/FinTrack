@@ -1,11 +1,12 @@
 /* src/styles/Expenses.css */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #f7f7f7, #e9ecef);
+    background: linear-gradient(to right, #070606, #6e92b7);
     color: #333;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+   
 }
 
 .expenses-container {

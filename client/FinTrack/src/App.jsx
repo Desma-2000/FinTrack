@@ -9,6 +9,7 @@ import Budgets from './components/Budgets';
 import Insights from './components/Insights';
 import { useAuth } from './Authcontext.jsx'; // Import the useAuth hook
 import './App.css';
+import "./components/home.css"
 
 const App = () => {
     const { isAuthenticated } = useAuth(); // Use the authentication status
