@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { useAuth } from '../Authcontext.jsx'; // Import useAuth to manage authentication
+import './home.css'; // Import the CSS file for styling
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -26,27 +27,32 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Email</label>
-                <input 
-                    type="email" 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    required 
-                />
-            </div>
-            <div>
-                <label>Password</label>
-                <input 
-                    type="password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                />
-            </div>
-            <button type="submit">Login</button>
-        </form>
+        <div className="login-container">
+            <h1>Login</h1>
+            <form onSubmit={handleSubmit} className="login-form">
+                <div className="form-group">
+                    <label>Email</label>
+                    <input 
+                        type="email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        required 
+                        className="form-input"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Password</label>
+                    <input 
+                        type="password" 
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        required 
+                        className="form-input"
+                    />
+                </div>
+                <button type="submit" className="login-button">Login</button>
+            </form>
+        </div>
     );
 };
 

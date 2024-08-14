@@ -9,11 +9,10 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  Filler // Import the Filler plugin
+  Filler
 } from 'chart.js';
-import axiosInstance from '../AxiosInstance'; // Import the custom Axios instance
+import axiosInstance from '../AxiosInstance'; 
 
-// Register the necessary Chart.js components including the Filler plugin
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,7 +21,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   ArcElement,
-  Filler // Register the Filler plugin
+  Filler
 );
 
 const Insights = () => {
@@ -101,55 +100,59 @@ const Insights = () => {
   };
 
   return (
-    <div>
+    <div className="insights-container">
       <h1>Financial Insights</h1>
-      <div style={{ width: '80%', margin: '0 auto' }}>
-        <h2>Monthly Expenses and Budgets</h2>
-        <Bar data={data} options={options} />
-        <h2>Expense Distribution</h2>
-        <Pie
-          data={{
-            labels: ['Food', 'Entertainment', 'Utilities', 'Other'],
-            datasets: [
-              {
-                label: 'Expense Categories',
-                data: [20, 15, 30, 35],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                ],
-                borderWidth: 1,
-              },
-            ],
-          }}
-        />
-        <h2>Set Financial Goals</h2>
-        <form onSubmit={handleGoalSubmit}>
-          <label>
-            Goal:
-            <input 
-              type="text" 
-              value={goal} 
-              onChange={(e) => setGoal(e.target.value)} 
-              placeholder="Enter your financial goal"
-            />
-          </label>
-          <button type="submit">Add Goal</button>
-        </form>
-        <h3>Current Goals</h3>
-        <ul>
-          {goals.map((g, index) => (
-            <li key={index}>{g}</li>
-          ))}
-        </ul>
+      <h2>Set Financial Goals</h2>
+      <form onSubmit={handleGoalSubmit}>
+        <label>
+          Goal:
+          <input 
+            type="text" 
+            value={goal} 
+            onChange={(e) => setGoal(e.target.value)} 
+            placeholder="Enter your financial goal"
+          />
+        </label>
+        <button type="submit">Add Goal</button>
+      </form>
+      <h3>Current Goals</h3>
+      <ul>
+        {goals.map((g, index) => (
+          <li key={index}>{g}</li>
+        ))}
+      </ul>
+      <div className="chart-container">
+        <div>
+          <h2>Monthly Expenses and Budgets</h2>
+          <Bar data={data} options={options} />
+        </div>
+        <div>
+          <h2>Expense Distribution</h2>
+          <Pie
+            data={{
+              labels: ['Food', 'Entertainment', 'Utilities', 'Other'],
+              datasets: [
+                {
+                  label: 'Expense Categories',
+                  data: [20, 15, 30, 35],
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                  ],
+                  borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+            }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,8 @@
 import "./home.css";
 
-
 const Home = () => {
     return (
-        <section>
+        <div className="full-height-container">
             <h1 className="tittle">FinTrack</h1>
             <div className="cards-container">
                 <div className="card">
@@ -19,7 +18,7 @@ const Home = () => {
                     <p>Gain insights into your spending patterns with visual data.</p>
                 </div>
             </div>
-        </section>
+        </div>
     );
 };
 
