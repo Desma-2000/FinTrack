@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../AxiosInstance'; // Import the custom Axios instance
+import axiosInstance from '../AxiosInstance';
+import './home.css';
 
 const Budgets = () => {
     const [budgets, setBudgets] = useState([]);
@@ -7,7 +8,7 @@ const Budgets = () => {
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [editingBudget, setEditingBudget] = useState(null); // For editing budgets
+    const [editingBudget, setEditingBudget] = useState(null);
 
     const fetchBudgets = async () => {
         try {
@@ -36,11 +37,9 @@ const Budgets = () => {
         e.preventDefault();
         try {
             if (editingBudget) {
-                // Update budget
                 await axiosInstance.put(`/budgets/${editingBudget.id}`, { amount, category, end_date: endDate });
                 setEditingBudget(null);
             } else {
-                // Add new budget
                 await axiosInstance.post('/budgets', { amount, category, end_date: endDate });
             }
             fetchBudgets();
@@ -78,50 +77,53 @@ const Budgets = () => {
     };
 
     return (
-        <div>
+        <div className="budgets-container">
             <h1>Budgets</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Amount</label>
-                    <input 
-                        type="number" 
-                        value={amount} 
-                        onChange={(e) => setAmount(e.target.value)} 
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Category</label>
-                    <input 
-                        type="text" 
-                        value={category} 
-                        onChange={(e) => setCategory(e.target.value)} 
-                        required
-                    />
-                </div>
-                <div>
-                    <label>End Date</label>
-                    <input 
-                        type="date" 
-                        value={endDate} 
-                        onChange={(e) => setEndDate(e.target.value)} 
-                        required
-                    />
-                </div>
-                <button type="submit">{editingBudget ? 'Update Budget' : 'Add Budget'}</button>
-            </form>
+            <div className="budget-form-card">
+                <form className="budget-form" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label>Amount</label>
+                        <input 
+                            type="number" 
+                            value={amount} 
+                            onChange={(e) => setAmount(e.target.value)} 
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Category</label>
+                        <input 
+                            type="text" 
+                            value={category} 
+                            onChange={(e) => setCategory(e.target.value)} 
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>End Date</label>
+                        <input 
+                            type="date" 
+                            value={endDate} 
+                            onChange={(e) => setEndDate(e.target.value)} 
+                            required
+                        />
+                    </div>
+                    <button type="submit">{editingBudget ? 'Update Budget' : 'Add Budget'}</button>
+                </form>
+            </div>
             <h2>Current Budgets</h2>
-            <ul>
+            <div className="budgets-list">
                 {budgets.map((budget) => (
-                    <li key={budget.id}>
-                        {budget.category} - ${budget.amount} - End Date: {budget.end_date}
-                        <br />
-                        Remaining Budget: ${calculateRemainingBudget(budget).toFixed(2)}
+                    <div className="budget-card" key={budget.id}>
+                        <h3>{budget.category}</h3>
+                        <p>Amount: ${budget.amount}</p>
+                        <p>End Date: {budget.end_date}</p>
+                        <p>Remaining Budget: ${calculateRemainingBudget(budget).toFixed(2)}</p>
                         <button onClick={() => handleEdit(budget)}>Edit</button>
                         <button onClick={() => handleDelete(budget.id)}>Delete</button>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axiosInstance from '../AxiosInstance';
-import "./expense.css"
+import "./home.css"
 import { Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,

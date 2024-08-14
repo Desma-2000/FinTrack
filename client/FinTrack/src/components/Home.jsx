@@ -1,5 +1,5 @@
 import "./home.css";
-import "./expense.css"
+
 
 const Home = () => {
     return (
