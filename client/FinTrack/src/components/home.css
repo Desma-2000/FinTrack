@@ -3,13 +3,15 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    font-family: 'Arial', sans-serif;
 }
 
 section {
     display: flex;
-    justify-content: flex-end; /* Align text to the right */
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Ensure the section takes up the full viewport height */
+    min-height: 100vh;
     background-image: url('/Fintrack2.jpg'); /* Path relative to public directory */
     background-size: cover;
     background-position: center;
@@ -18,9 +20,159 @@ section {
 
 .tittle {
     color: rgb(111, 242, 60);
-    text-align: right; /* Align text to the right */
-    font-size: 2rem;
-    margin-right: 20px; /* Add some space from the edge */
-    z-index: 1; /* Ensure text is above background */
-    position: relative; /* To ensure correct stacking */
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 20px; /* Space below the title */
+    z-index: 1;
+    position: relative;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between cards */
+    z-index: 1;
+    position: relative;
+    padding: 20px; /* Space around the cards */
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1rem;
+    color: #333;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #ece9e9, #6e92b7);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.expenses-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgb(227, 224, 224);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #4a4a4a;
+}
+
+.expense-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="date"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Flexbox layout for charts */
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 2rem 0;
+}
+
+.chart-container > div {
+    flex: 1;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.chart-container > div:last-child {
+    margin-right: 0;
+}
+
+/* Styling for current expenses */
+.expense-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 1rem;
+}
+
+.expense-list li {
+    flex: 1 1 calc(33.333% - 1rem); /* 3 items per row, with spacing */
+    padding: 1rem;
+    border: 1px solid #ccc;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.expense-list button {
+    margin-left: 1rem;
+    background-color: #dc3545;
+    border: none;
+    padding: 0.5rem;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.expense-list button:hover {
+    background-color: #c82333;
 }

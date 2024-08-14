@@ -1,12 +1,10 @@
-/* src/styles/Expenses.css */
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #594747, #6e92b7);
-    color: #333;
+    background: linear-gradient(to right, #f3ecec, #eef1f4);
+    color: #f4ecec;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-   
 }
 
 .expenses-container {
@@ -24,14 +22,18 @@ h1, h2 {
     color: #4a4a4a;
 }
 
-.expense-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2rem;
-    padding: 1rem;
+.expense-form-card {
+    padding: 2rem;
     background: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.expense-form {
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group {
@@ -68,6 +70,8 @@ button:hover {
 }
 
 .chart-container {
+    display: flex;
+    justify-content: space-around;
     margin: 2rem 0;
     padding: 1rem;
     background: #f8f9fa;
@@ -75,21 +79,29 @@ button:hover {
     border-radius: 8px;
 }
 
+.chart {
+    width: 45%;
+}
+
 .expense-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.expense-list li {
+.expense-card {
+    flex: 1 1 calc(33.333% - 1rem);
     padding: 1rem;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #f8f9fa;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
 }
 
 .expense-list button {
