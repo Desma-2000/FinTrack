@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:5555', // Your backend base URL
+    baseURL: 'https://fintrack-19.onrender.com', // Your backend base URL
 });
 
 // Request interceptor to add token to headers
