@@ -1,6 +1,6 @@
 from faker import Faker
 from datetime import datetime, timedelta
-from app import app
+from FinTrack.server.app import app
  # Ensure you import create_app if you have an application factory
 from models import db, User, Expense, Budget, Goal  # Ensure you import your models
 import bcrypt
