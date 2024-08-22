@@ -12,7 +12,7 @@ import random, os
 from datetime import datetime
 
 # Add your model imports
-from models import db, User, Expense, Budget, Goal
+from server.models import db, User, Expense, Budget, Goal
 
 # Instantiate app, set attributes
 app = Flask(__name__)
