@@ -14,7 +14,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5555/auth/login', {
+            const response = await axios.post('https://fintrack-19.onrender.com/auth/login', {
                 email,
                 password,
             });
